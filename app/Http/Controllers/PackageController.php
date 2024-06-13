@@ -13,7 +13,8 @@ class PackageController extends Controller
      */
     public function index()
     {
-        //
+        $packages = Package::with('supermarket')->get();
+        return $packages;
     }
 
     /**

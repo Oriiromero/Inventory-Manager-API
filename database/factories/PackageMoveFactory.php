@@ -17,7 +17,10 @@ class PackageMoveFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'package_id' => \App\Models\Package::factory(),
+            'status' => $this->faker->randomElement(['arrived', 'in transit', 'delivered']),
+            'location' => $this->faker->address,
+            'handled_by' => \App\Models\User::factory(),
         ];
     }
 }

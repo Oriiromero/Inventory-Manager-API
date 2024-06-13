@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->foreign('supermarket_id')->references('id')->on('supermarkets');
-            $table->integer('tracking_number');
+            $table->unsignedBigInteger('supermarket_id');
+            $table->string('tracking_number');
             $table->string('description');
-            $table->integer('weight');
+            $table->float('weight');
             $table->string('dimensions');
             $table->string('status');
             $table->timestamps();
+
+            $table->foreign('supermarket_id')->references('id')->on('supermarkets');
         });
     }
 

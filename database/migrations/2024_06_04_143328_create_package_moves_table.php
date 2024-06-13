@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('package_moves', function (Blueprint $table) {
             $table->id();
-            $table->foreign('package_id')->references('id')->on('packages');
+            $table->unsignedBigInteger('package_id');
             $table->string('status');
             $table->string('location');
-            $table->foreign('handled_by')->references('id')->on('users');
+            $table->unsignedBigInteger('handled_by');
             $table->timestamps();
+
+            $table->foreign('package_id')->references('id')->on('packages');
+            $table->foreign('handled_by')->references('id')->on('users');
         });
     }
 

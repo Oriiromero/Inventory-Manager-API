@@ -17,7 +17,12 @@ class PackageFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'supermarket_id' => \App\Models\Supermarket::factory(),
+            'tracking_number' => $this->faker->unique()->numerify('PKG-#######'),
+            'description' => $this->faker->text,
+            'weight' => $this->faker->randomFloat(2, 1, 100),
+            'dimensions' => $this->faker->randomElement(['10x10x10', '20x20x20', '30x30x30']),
+            'status' => $this->faker->randomElement(['arrived', 'in transit', 'delivered']),
         ];
     }
 }

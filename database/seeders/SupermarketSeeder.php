@@ -13,8 +13,13 @@ class SupermarketSeeder extends Seeder
      */
     public function run(): void
     {
+        echo "Seeding 10 supermarkets\n";
+
         Supermarket::factory()
-        ->count(5)
+        ->count(10)
         ->create();
+        $count = Supermarket::count();
+
+        echo "Total supermarkets in DB: $count\n";
     }
 }

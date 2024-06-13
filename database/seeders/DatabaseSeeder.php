@@ -13,13 +13,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        echo "Running DatabaseSeeder\n";
 
         $this->call([
+            UserSeeder::class,
             SupermarketSeeder::class,
             PackageSeeder::class,
             PackageMoveSeeder::class,
             AuditLogSeeder::class,
-            UserSeeder::class,
         ]);
+
+        echo "DatabaseSeeder completed\n";
     }
 }

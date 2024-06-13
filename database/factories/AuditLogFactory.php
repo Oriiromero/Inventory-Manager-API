@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,7 @@ class AuditLogFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => User::inRandomOrder()->first()->id,
             'action' => $this->faker->randomElement(['create', 'update', 'delete']),
             'target_table' => $this->faker->randomElement(['users', 'packages', 'supermarkets', 'package_movements']),
             'target_id' => $this->faker->randomNumber(),

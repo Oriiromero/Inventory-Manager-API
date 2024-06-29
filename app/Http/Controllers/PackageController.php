@@ -2,20 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\PackagesFilter;
+use Illuminate\Http\Request;
 use App\Http\Resources\PackageResource;
 use App\Models\Package;
 use App\Http\Requests\StorePackageRequest;
 use App\Http\Requests\UpdatePackageRequest;
+use App\Http\Resources\PackageCollection;
 
 class PackageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $packages = Package::with('supermarket')->get();
-        return $packages;
+        $filter = new PackagesFilter();
+        $filterItems = $filter->transform($request);
+
+        $includeSupermarkets = $request->query('includeSupermarkets');
+
+        $packages = Package::where($filterItems);
+
+        if($includeSupermarkets)
+        {
+            $packages = $packages->with('supermarket');
+        }
+
+        return new PackageCollection($packages->paginate()->appends($request->query()));
+        // $packages = Package::with('supermarket')->get();
+        // return $packages;
     }
 
 
@@ -40,10 +56,6 @@ class PackageController extends Controller
         }
 
         return new PackageResource($package);
-
-        // $package->load('supermarket');
-
-        // return $package;
     }
 
     /**

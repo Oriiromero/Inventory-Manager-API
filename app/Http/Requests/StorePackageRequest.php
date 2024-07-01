@@ -11,7 +11,7 @@ class StorePackageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,29 @@ class StorePackageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+           'trackingNumber' => ['required'],
+            'description' => ['required'],
+            'weight' => ['required'],
+            'dimensions' => ['required'],
+            'status' => ['required'],
+            'supermarketId' => ['sometimes', 'required'],
         ];
+    }
+
+    protected function prepareForValidation() 
+    {
+        if($this->trackingNumber)
+        {
+            $this->merge([
+                'tracking_number' => $this->trackingNumber,
+            ]);
+        }
+
+        if($this->supermarketId)
+        {
+            $this->merge([
+                'supermarket_id' => $this->supermarketId,
+            ]);
+        }
     }
 }

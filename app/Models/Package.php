@@ -23,5 +23,8 @@ class Package extends Model
         return $this->hasOne(PackageMove::class);
     }
 
+    protected $fillable = [
+        'tracking_number', 'description', 'weight', 'dimensions', 'status', 'supermarket_id'
+    ];
 
 }

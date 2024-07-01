@@ -30,8 +30,6 @@ class PackageController extends Controller
         }
 
         return new PackageCollection($packages->paginate()->appends($request->query()));
-        // $packages = Package::with('supermarket')->get();
-        // return $packages;
     }
 
 
@@ -40,7 +38,7 @@ class PackageController extends Controller
      */
     public function store(StorePackageRequest $request)
     {
-        //
+        return new PackageResource(Package::create($request->all()));
     }
 
     /**
@@ -57,15 +55,7 @@ class PackageController extends Controller
 
         return new PackageResource($package);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Package $package)
-    {
-        //
-    }
-
+    
     /**
      * Update the specified resource in storage.
      */

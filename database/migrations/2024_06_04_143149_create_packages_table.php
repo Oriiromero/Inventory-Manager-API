@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('supermarket_id');
+            $table->unsignedBigInteger('supermarket_id')->nullable();
             $table->string('tracking_number');
             $table->string('description');
             $table->float('weight');

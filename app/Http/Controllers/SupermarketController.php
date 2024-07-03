@@ -22,8 +22,6 @@ class SupermarketController extends Controller
         $filter = new SupermarketsFilter();
         $queryItems = $filter->transform($request);
 
-        Log::info('Query Items:', $queryItems);
-
         if(count($queryItems) == 0)
         {
             return new SupermarketCollection(Supermarket::paginate());
@@ -31,10 +29,6 @@ class SupermarketController extends Controller
         else
         {
             $supermarkets = Supermarket::where($queryItems)->paginate();
-
-            Log::info('SQL Query:', [$supermarkets->toSql()]);
-            Log::info('Bindings:', $supermarkets->getBindings());
-
 
             return new SupermarketCollection($supermarkets->appends($request->query()));
         }
@@ -44,7 +38,7 @@ class SupermarketController extends Controller
      */
     public function store(StoreSupermarketRequest $request)
     {
-        //
+        return new SupermarketResource(Supermarket::create($request->all()));
     }
 
     /**
@@ -60,7 +54,9 @@ class SupermarketController extends Controller
      */
     public function update(UpdateSupermarketRequest $request, Supermarket $supermarket)
     {
-        //
+        $supermarket->update($request->all());
+
+        response()->json(['message' => 'Supermarket updated!']);
     }
 
     /**

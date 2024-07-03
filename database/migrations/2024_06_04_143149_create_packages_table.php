@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('status');
             $table->timestamps();
 
-            $table->foreign('supermarket_id')->references('id')->on('supermarkets');
+            $table->foreign('supermarket_id')->references('id')->on('supermarkets')->onDelete('cascade');
         });
     }
 

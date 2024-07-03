@@ -31,7 +31,7 @@ class UpdatePackageRequest extends FormRequest
                     'weight' => ['required'],
                     'dimensions' => ['required'],
                     'status' => ['required'],
-                    'supermarketId' => ['required'],
+                    'supermarketId' => ['sometimes','required'],
                 ];
             } 
             else 

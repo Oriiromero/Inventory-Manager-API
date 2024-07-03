@@ -11,7 +11,8 @@ class StoreSupermarketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        #TODO: turn this to false when the auth by user is completed
+        return true;
     }
 
     /**
@@ -22,7 +23,19 @@ class StoreSupermarketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required'],
+            'address' => ['required'],
+            'contactEmail' => ['required'],
         ];
+    }
+
+    protected function prepareForValidation() 
+    {
+        if($this->contactEmail)
+        {
+            $this->merge([
+                'contact_email' => $this->contactEmail,
+            ]);
+        }
     }
 }

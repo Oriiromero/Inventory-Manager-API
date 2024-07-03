@@ -2,28 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\SupermarketsFilter;
+use App\Http\Resources\SupermarketCollection;
 use App\Models\Supermarket;
 use App\Http\Requests\StoreSupermarketRequest;
 use App\Http\Requests\UpdateSupermarketRequest;
+use App\Http\Resources\SupermarketResource;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SupermarketController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $filter = new SupermarketsFilter();
+        $queryItems = $filter->transform($request);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        Log::info('Query Items:', $queryItems);
 
+        if(count($queryItems) == 0)
+        {
+            return new SupermarketCollection(Supermarket::paginate());
+        }
+        else
+        {
+            $supermarkets = Supermarket::where($queryItems)->paginate();
+
+            Log::info('SQL Query:', [$supermarkets->toSql()]);
+            Log::info('Bindings:', $supermarkets->getBindings());
+
+
+            return new SupermarketCollection($supermarkets->appends($request->query()));
+        }
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -37,15 +52,7 @@ class SupermarketController extends Controller
      */
     public function show(Supermarket $supermarket)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Supermarket $supermarket)
-    {
-        //
+        return new SupermarketResource($supermarket);
     }
 
     /**
@@ -61,6 +68,15 @@ class SupermarketController extends Controller
      */
     public function destroy(Supermarket $supermarket)
     {
-        //
+        try 
+        {
+            $supermarket->delete();
+
+            return response()->json(['message' => 'Supermarket deleted successfully'], 200);
+        }
+        catch(Exception $e)
+        {
+            return response()->json(['message' => 'Failed to delete supermarket.', 'details' => $e->getMessage()], 500);
+        }
     }
 }

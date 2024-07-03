@@ -9,6 +9,7 @@ use App\Models\Package;
 use App\Http\Requests\StorePackageRequest;
 use App\Http\Requests\UpdatePackageRequest;
 use App\Http\Resources\PackageCollection;
+use Exception;
 
 class PackageController extends Controller
 {
@@ -61,7 +62,7 @@ class PackageController extends Controller
      */
     public function update(UpdatePackageRequest $request, Package $package)
     {
-        //
+        $package->update($request->all());
     }
 
     /**
@@ -69,6 +70,15 @@ class PackageController extends Controller
      */
     public function destroy(Package $package)
     {
-        //
+        try 
+        {
+            $package->delete();
+
+            return response()->json(['message' => 'Package deleted successfully'], 200);
+        }
+        catch(Exception $e)
+        {
+            return response()->json(['message' => 'Failed to delete package.', 'details' => $e->getMessage()], 500);
+        }
     }
 }

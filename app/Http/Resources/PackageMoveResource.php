@@ -18,8 +18,10 @@ class PackageMoveResource extends JsonResource
             'id' => $this->id,
             'status' => $this->status,
             'location' => $this->location,
-            'package' => new PackageResource($this->whenLoaded('package')),
-            'user' => new UserResource($this->whenLoaded('user'))
+            'packageId' => $this->package_id,
+            'userId' => $this->handled_by,
+            'packageInfo' => new PackageResource($this->whenLoaded('package')),
+            'handledBy' => new UserResource($this->whenLoaded('user'))
         ];
     }
 }

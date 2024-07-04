@@ -19,5 +19,8 @@ Route::group(['prefix' => 'test'], function() {
 
     Route::get('/packages-moves', [PackageMoveController::class, 'index']);
     Route::get('/packages-moves/{packageMove}', [PackageMoveController::class, 'show']);
-
+    Route::post('/packages-moves', [PackageMoveController::class, 'store']);
+    Route::put('/packages-moves/{packageMove}', [PackageMoveController::class, 'update']);
+    Route::patch('/packages-moves/{packageMove}', [PackageMoveController::class, 'update']);
+    Route::delete('/packages-moves/{packageMove}', [PackageMoveController::class, 'destroy']);
 });

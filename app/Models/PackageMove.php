@@ -17,4 +17,8 @@ class PackageMove extends Model
     {
         return $this->belongsTo(Package::class);
     }
+
+    protected $fillable = [
+        'status', 'location', 'handled_by', 'package_id'
+    ];
 }

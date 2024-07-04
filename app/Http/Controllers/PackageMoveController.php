@@ -8,6 +8,7 @@ use App\Http\Resources\PackageMoveResource;
 use App\Models\PackageMove;
 use App\Http\Requests\StorePackageMoveRequest;
 use App\Http\Requests\UpdatePackageMoveRequest;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -48,7 +49,8 @@ class PackageMoveController extends Controller
      */
     public function store(StorePackageMoveRequest $request)
     {
-        //
+        return new PackageMoveResource(PackageMove::create($request->all()));
+
     }
 
     /**
@@ -56,10 +58,6 @@ class PackageMoveController extends Controller
      */
     public function show(PackageMove $packageMove)
     {
-
-        Log::info($packageMove);
-
-
         $includePackage = request()->query('includePackage');
         $includeUser= request()->query('includeUser');
 
@@ -85,7 +83,9 @@ class PackageMoveController extends Controller
      */
     public function update(UpdatePackageMoveRequest $request, PackageMove $packageMove)
     {
-        //
+        $packageMove->update($request->all());
+
+        return response()->json(['message' => 'Package move updated correctly.'], 200);
     }
 
     /**
@@ -93,6 +93,15 @@ class PackageMoveController extends Controller
      */
     public function destroy(PackageMove $packageMove)
     {
-        //
+        try 
+        {
+            $packageMove->delete();
+
+            return response()->json(['message' => 'Package deleted successfully'], 200);
+        }
+        catch(Exception $e)
+        {
+            return response()->json(['message' => 'Failed to delete package.', 'details' => $e->getMessage()], 500);
+        }
     }
 }

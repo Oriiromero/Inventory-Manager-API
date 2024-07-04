@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Filters\PackageMovesFilter;
 use App\Http\Resources\PackageMoveCollection;
+use App\Http\Resources\PackageMoveResource;
 use App\Models\PackageMove;
 use App\Http\Requests\StorePackageMoveRequest;
 use App\Http\Requests\UpdatePackageMoveRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PackageMoveController extends Controller
 {
@@ -24,23 +26,21 @@ class PackageMoveController extends Controller
 
         $packageMoves = PackageMove::where($filterItems);
 
-        if ($includePackage && $includeUser) {
+        if ($includePackage && $includeUser) 
+        {
             $packageMoves = $packageMoves->with('package', 'user');
-        } elseif ($includePackage) {
+
+        } elseif ($includePackage) 
+        {
             $packageMoves = $packageMoves->with('package');
-        } elseif ($includeUser) {
+
+        } elseif ($includeUser) 
+        {
             $packageMoves = $packageMoves->with('user');
+
         }
 
         return new PackageMoveCollection($packageMoves->paginate()->appends($request->query()));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -56,15 +56,28 @@ class PackageMoveController extends Controller
      */
     public function show(PackageMove $packageMove)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PackageMove $packageMove)
-    {
-        //
+        Log::info($packageMove);
+
+
+        $includePackage = request()->query('includePackage');
+        $includeUser= request()->query('includeUser');
+
+        if ($includePackage && $includeUser) 
+        {
+           return new PackageMoveResource($packageMove->load('package', 'user'));
+
+        } elseif ($includePackage) 
+        {
+            return new PackageMoveResource($packageMove->load('package'));
+
+        } elseif ($includeUser) 
+        {
+            return new PackageMoveResource($packageMove->load('user'));
+
+        }
+
+        return new PackageMoveResource($packageMove);
     }
 
     /**

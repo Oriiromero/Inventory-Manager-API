@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PackageMoveResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,9 @@ class PackageMoveResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'status' => $this->status,
-            'location' => $this->location,
-            'package' => new PackageResource($this->whenLoaded('package')),
-            'user' => new UserResource($this->whenLoaded('user'))
+            'name' => $this->name,
+            'role' => $this->role,
+            'email' => $this->email    
         ];
     }
 }

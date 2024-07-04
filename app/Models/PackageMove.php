@@ -11,7 +11,7 @@ class PackageMove extends Model
 
     public function user() 
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'handled_by');
     }
     public function package() 
     {

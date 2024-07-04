@@ -30,6 +30,8 @@ class SupermarketController extends Controller
         {
             $supermarkets = Supermarket::where($queryItems)->paginate();
 
+            Log::info($supermarkets);
+
             return new SupermarketCollection($supermarkets->appends($request->query()));
         }
     }

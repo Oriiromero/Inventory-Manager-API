@@ -8,12 +8,19 @@ use App\Models\Supermarket;
 use App\Http\Requests\StoreSupermarketRequest;
 use App\Http\Requests\UpdateSupermarketRequest;
 use App\Http\Resources\SupermarketResource;
+use App\Services\AuditLogService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class SupermarketController extends Controller
 {
+    public $auditLogService;
+
+    public function __construct(AuditLogService $auditLogService)
+    {
+        $this->auditLogService = $auditLogService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -40,7 +47,11 @@ class SupermarketController extends Controller
      */
     public function store(StoreSupermarketRequest $request)
     {
-        return new SupermarketResource(Supermarket::create($request->all()));
+        $supermarket = Supermarket::create($request->all());
+
+        $this->auditLogService->storeAction('store', 'supermarkets', $supermarket->id);
+
+        return new SupermarketResource($supermarket);
     }
 
     /**
@@ -58,6 +69,8 @@ class SupermarketController extends Controller
     {
         $supermarket->update($request->all());
 
+        $this->auditLogService->storeAction('update', 'supermarkets', $supermarket->id);
+
         response()->json(['message' => 'Supermarket updated!']);
     }
 
@@ -69,6 +82,8 @@ class SupermarketController extends Controller
         try 
         {
             $supermarket->delete();
+
+            $this->auditLogService->storeAction('delete', 'supermarkets', $supermarket->id);
 
             return response()->json(['message' => 'Supermarket deleted successfully'], 200);
         }

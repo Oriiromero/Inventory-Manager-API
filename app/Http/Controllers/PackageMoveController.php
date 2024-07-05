@@ -8,12 +8,20 @@ use App\Http\Resources\PackageMoveResource;
 use App\Models\PackageMove;
 use App\Http\Requests\StorePackageMoveRequest;
 use App\Http\Requests\UpdatePackageMoveRequest;
+use App\Services\AuditLogService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PackageMoveController extends Controller
 {
+    public $auditLogService;
+
+    public function __construct(AuditLogService $auditLogService)
+    {
+        $this->auditLogService = $auditLogService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -49,7 +57,11 @@ class PackageMoveController extends Controller
      */
     public function store(StorePackageMoveRequest $request)
     {
-        return new PackageMoveResource(PackageMove::create($request->all()));
+        $packageMove = PackageMove::create($request->all());
+
+        $this->auditLogService->storeAction('store', 'packageMoves', $packageMove->id); 
+
+        return new PackageMoveResource($packageMove);
 
     }
 
@@ -85,6 +97,8 @@ class PackageMoveController extends Controller
     {
         $packageMove->update($request->all());
 
+        $this->auditLogService->storeAction('update', 'packageMoves', $packageMove->id);
+
         return response()->json(['message' => 'Package move updated correctly.'], 200);
     }
 
@@ -96,6 +110,8 @@ class PackageMoveController extends Controller
         try 
         {
             $packageMove->delete();
+
+            $this->auditLogService->storeAction('delete', 'packageMove', $packageMove->id);
 
             return response()->json(['message' => 'Package deleted successfully'], 200);
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Filters\PackagesFilter;
+use App\Services\AuditLogService;
 use Illuminate\Http\Request;
 use App\Http\Resources\PackageResource;
 use App\Models\Package;
@@ -13,6 +14,13 @@ use Exception;
 
 class PackageController extends Controller
 {
+    public $auditLogService;
+
+    public function __construct(AuditLogService $auditLogService)
+    {
+        $this->auditLogService = $auditLogService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -39,7 +47,11 @@ class PackageController extends Controller
      */
     public function store(StorePackageRequest $request)
     {
-        return new PackageResource(Package::create($request->all()));
+        $package = Package::create($request->all());
+
+        $this->auditLogService->storeAction('store', 'packages', $package->id);
+
+        return new PackageResource($package);
     }
 
     /**
@@ -63,6 +75,8 @@ class PackageController extends Controller
     public function update(UpdatePackageRequest $request, Package $package)
     {
         $package->update($request->all());
+
+        $this->auditLogService->storeAction('update', 'packages', $package->id);
     }
 
     /**
@@ -73,6 +87,8 @@ class PackageController extends Controller
         try 
         {
             $package->delete();
+
+            $this->auditLogService->storeAction('delete', 'packages', $package->id);
 
             return response()->json(['message' => 'Package deleted successfully'], 200);
         }

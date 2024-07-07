@@ -22,14 +22,14 @@ class StorePackageRequest extends FormRequest
      */
     public function rules(): array
     {
-        #TODO: PUT TYPOS AND MAX-MIN LENGTH
+
         return [
-           'trackingNumber' => ['required'],
-            'description' => ['required'],
-            'weight' => ['required'],
-            'dimensions' => ['required'],
-            'status' => ['required'],
-            'supermarketId' => ['sometimes', 'required'], //exists:supermarkets,id
+           'trackingNumber' => ['required', 'string', 'max:100'],
+            'description' => ['required', 'string', 'max:250'],
+            'weight' => ['required', 'numeric'],
+            'dimensions' => ['required', 'string', 'max:50'],
+            'status' => ['required', 'string'],
+            'supermarketId' => ['sometimes', 'required', 'exists:supermarkets,id'], //exists:supermarkets,id
         ];
     }
 

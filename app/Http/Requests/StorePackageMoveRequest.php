@@ -23,10 +23,10 @@ class StorePackageMoveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required'],
-            'location' => ['required'],
-            'packageId' => ['required'],
-            'handledBy' => ['required']
+            'status' => ['required', 'string'],
+            'location' => ['required', 'string'],
+            'packageId' => ['required', 'exists:packages,id'],
+            'handledBy' => ['required', 'exists:users,id']
         ];
     }
 

@@ -23,9 +23,9 @@ class StoreSupermarketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required'],
-            'address' => ['required'],
-            'contactEmail' => ['required'],
+            'name' => ['required', 'string', 'max:150'],
+            'address' => ['required', 'string', 'max:150'],
+            'contactEmail' => ['required', 'email'],
         ];
     }
 

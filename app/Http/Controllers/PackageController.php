@@ -11,6 +11,7 @@ use App\Http\Requests\StorePackageRequest;
 use App\Http\Requests\UpdatePackageRequest;
 use App\Http\Resources\PackageCollection;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class PackageController extends Controller
 {
@@ -47,9 +48,11 @@ class PackageController extends Controller
      */
     public function store(StorePackageRequest $request)
     {
+        $user = Auth::user();
+
         $package = Package::create($request->all());
 
-        $this->auditLogService->storeAction('store', 'packages', $package->id);
+        $this->auditLogService->storeAction('store', 'packages', $package->id, $user->id);
 
         return new PackageResource($package);
     }
@@ -74,9 +77,11 @@ class PackageController extends Controller
      */
     public function update(UpdatePackageRequest $request, Package $package)
     {
+        $user = Auth::user();
+
         $package->update($request->all());
 
-        $this->auditLogService->storeAction('update', 'packages', $package->id);
+        $this->auditLogService->storeAction('update', 'packages', $package->id,  $user->id);
     }
 
     /**
@@ -86,9 +91,11 @@ class PackageController extends Controller
     {
         try 
         {
+            $user = Auth::user();
+
             $package->delete();
 
-            $this->auditLogService->storeAction('delete', 'packages', $package->id);
+            $this->auditLogService->storeAction('delete', 'packages', $package->id,  $user->id);
 
             return response()->json(['message' => 'Package deleted successfully'], 200);
         }

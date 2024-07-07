@@ -11,6 +11,7 @@ use App\Http\Requests\UpdatePackageMoveRequest;
 use App\Services\AuditLogService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PackageMoveController extends Controller
@@ -57,9 +58,12 @@ class PackageMoveController extends Controller
      */
     public function store(StorePackageMoveRequest $request)
     {
+
+        $user = Auth::user();
+
         $packageMove = PackageMove::create($request->all());
 
-        $this->auditLogService->storeAction('store', 'packageMoves', $packageMove->id); 
+        $this->auditLogService->storeAction('store', 'packageMoves', $packageMove->id, $user->id); 
 
         return new PackageMoveResource($packageMove);
 
@@ -95,9 +99,12 @@ class PackageMoveController extends Controller
      */
     public function update(UpdatePackageMoveRequest $request, PackageMove $packageMove)
     {
+
+        $user = Auth::user();
+
         $packageMove->update($request->all());
 
-        $this->auditLogService->storeAction('update', 'packageMoves', $packageMove->id);
+        $this->auditLogService->storeAction('update', 'packageMoves', $packageMove->id, $user->id);
 
         return response()->json(['message' => 'Package move updated correctly.'], 200);
     }
@@ -109,9 +116,12 @@ class PackageMoveController extends Controller
     {
         try 
         {
+
+            $user = Auth::user();
+
             $packageMove->delete();
 
-            $this->auditLogService->storeAction('delete', 'packageMove', $packageMove->id);
+            $this->auditLogService->storeAction('delete', 'packageMove', $packageMove->id, $user->id);
 
             return response()->json(['message' => 'Package deleted successfully'], 200);
         }

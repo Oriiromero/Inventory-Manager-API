@@ -10,14 +10,11 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Authentication routes
-Route::post('/register', [RegisteredUserController::class, 'store'])
-    ->middleware('guest')
-    ->name('register');
-
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
     ->middleware('guest')
     ->name('login');
@@ -39,25 +36,33 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
     ->name('verification.send');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-    ->middleware('auth')
+    ->middleware('auth:sanctum')
     ->name('logout');
 
 
-// Authenticated routes
+// Routes accessible to 'admin' role
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
+    Route::delete('users/{user}', [UserController::class, 'destroy']);
+
+    Route::delete('packages-moves/{packageMove}', [PackageMoveController::class, 'destroy']);
+    Route::delete('packages/{packageMove}', [PackageController::class, 'destroy']);
+    Route::delete('supermarkets/{supermarket}', [SupermarketController::class, 'destroy']);
+});
+
+//Routes accessible to 'employee' role
+Route::middleware(['auth:sanctum', 'role:employee'])->group(function () {
+    Route::apiResource('packages', PackageController::class)->except(['destroy']);
+    Route::apiResource('supermarkets', SupermarketController::class)->except(['destroy']);
+    Route::get('/packages-moves', [PackageMoveController::class, 'index']);
+    Route::get('/packages-moves/{packageMove}', [PackageMoveController::class, 'show']);
+    Route::post('/packages-moves', [PackageMoveController::class, 'store']);
+    Route::put('/packages-moves/{packageMove}', [PackageMoveController::class, 'update']);
+    Route::patch('/packages-moves/{packageMove}', [PackageMoveController::class, 'update']);
+});
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
-    });
-
-    Route::group(['prefix' => 'test'], function () {
-        Route::apiResource('packages', PackageController::class);
-        Route::apiResource('supermarkets', SupermarketController::class);
-
-        Route::get('/packages-moves', [PackageMoveController::class, 'index']);
-        Route::get('/packages-moves/{packageMove}', [PackageMoveController::class, 'show']);
-        Route::post('/packages-moves', [PackageMoveController::class, 'store']);
-        Route::put('/packages-moves/{packageMove}', [PackageMoveController::class, 'update']);
-        Route::patch('/packages-moves/{packageMove}', [PackageMoveController::class, 'update']);
-        Route::delete('/packages-moves/{packageMove}', [PackageMoveController::class, 'destroy']);
     });
 });

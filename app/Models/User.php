@@ -6,10 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     public function packages()
     {
@@ -19,10 +20,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(PackageMove::class);
     }
-    public function auditLogs()
-    {
-        return $this->hasMany(AuditLog::class);
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -30,7 +27,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
+        'name',
         'email',
         'password',
         'role'

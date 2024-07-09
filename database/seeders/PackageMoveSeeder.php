@@ -13,8 +13,13 @@ class PackageMoveSeeder extends Seeder
      */
     public function run(): void
     {
+        echo "Seeding 20 package moves\n";
+
         PackageMove::factory()
         ->count(20)
         ->create();
+
+        $count = PackageMove::count();
+        echo "Total package moves in DB: $count\n";
     }
 }

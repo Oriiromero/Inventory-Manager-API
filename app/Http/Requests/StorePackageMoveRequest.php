@@ -11,7 +11,8 @@ class StorePackageMoveRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        #TODO: turn this to false when the auth by user is completed
+        return true;
     }
 
     /**
@@ -22,7 +23,27 @@ class StorePackageMoveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'status' => ['required', 'string'],
+            'location' => ['required', 'string'],
+            'packageId' => ['required', 'exists:packages,id'],
+            'handledBy' => ['required', 'exists:users,id']
         ];
+    }
+
+    protected function prepareForValidation() 
+    {
+        if($this->packageId)
+        {
+            $this->merge([
+                'package_id' => $this->packageId,
+            ]);
+        }
+
+        if($this->handledBy)
+        {
+            $this->merge([
+                'handled_by' => $this->handledBy,
+            ]);
+        }
     }
 }

@@ -11,7 +11,7 @@ class UpdateSupermarketRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,33 @@ class UpdateSupermarketRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+
+            if($method == 'PUT') 
+            {
+                return [
+                    'name' => ['required'],
+                    'address' => ['required'],
+                    'contactEmail' => ['required'],
+                ];
+            } 
+            else 
+            {
+                return [
+                    'name' => ['sometimes', 'required'],
+                    'address' => ['sometimes', 'required'],
+                    'contactEmail' => ['sometimes', 'required'],
+                ];
+            }
+    }
+
+    protected function prepareForValidation() 
+    {
+        if($this->contactEmail)
+        {
+            $this->merge([
+                'contact_email' => $this->contactEmail,
+            ]);
+        }
     }
 }

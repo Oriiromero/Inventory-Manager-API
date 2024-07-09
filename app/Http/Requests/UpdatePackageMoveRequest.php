@@ -11,7 +11,7 @@ class UpdatePackageMoveRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,41 @@ class UpdatePackageMoveRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        $method = $this->method();
+
+        if ($method == 'PUT') 
+        {
+            return [
+                'status' => ['required'],
+                'location' => ['required'],
+                'packageId' => ['sometimes', 'required'],
+                'handledBy' => ['sometimes', 'required']
+            ];
+        } else 
+        {
+            return [
+                'status' => ['sometimes', 'required'],
+                'location' => ['sometimes', 'required'],
+                'packageId' => ['sometimes', 'required'],
+                'handledBy' => ['sometimes', 'required']
+            ];
+        }
+    }
+
+    protected function prepareForValidation() 
+    {
+        if($this->packageId)
+        {
+            $this->merge([
+                'package_id' => $this->packageId,
+            ]);
+        }
+
+        if($this->handledBy)
+        {
+            $this->merge([
+                'handled_by' => $this->handledBy,
+            ]);
+        }
     }
 }

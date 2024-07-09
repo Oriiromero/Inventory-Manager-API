@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Package;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +19,10 @@ class PackageMoveFactory extends Factory
     public function definition(): array
     {
         return [
-            'package_id' => \App\Models\Package::factory(),
+            'package_id' => Package::inRandomOrder()->first()->id,
             'status' => $this->faker->randomElement(['arrived', 'in transit', 'delivered']),
             'location' => $this->faker->address,
-            'handled_by' => \App\Models\User::factory(),
+            'handled_by' => User::inRandomOrder()->first()->id,
         ];
     }
 }

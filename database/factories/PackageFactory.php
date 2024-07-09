@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Supermarket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,7 @@ class PackageFactory extends Factory
     public function definition(): array
     {
         return [
-            'supermarket_id' => \App\Models\Supermarket::factory(),
+            'supermarket_id' => Supermarket::inRandomOrder()->first()->id,
             'tracking_number' => $this->faker->unique()->numerify('PKG-#######'),
             'description' => $this->faker->text,
             'weight' => $this->faker->randomFloat(2, 1, 100),

@@ -13,6 +13,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        echo "Seeding 25 + 1 users ";
+
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -21,5 +23,8 @@ class UserSeeder extends Seeder
         User::factory()
         ->count(25)
         ->create();
+
+        $count = User::count();
+        echo "Total Users in DB: $count\n";
     }
 }

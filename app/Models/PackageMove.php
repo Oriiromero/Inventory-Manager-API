@@ -11,10 +11,14 @@ class PackageMove extends Model
 
     public function user() 
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'handled_by');
     }
     public function package() 
     {
         return $this->belongsTo(Package::class);
     }
+
+    protected $fillable = [
+        'status', 'location', 'handled_by', 'package_id'
+    ];
 }

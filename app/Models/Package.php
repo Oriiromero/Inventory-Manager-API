@@ -15,7 +15,7 @@ class Package extends Model
     }
     public function supermarket() 
     {
-        return $this->belongsTo(Supermarket::class);
+        return $this->belongsTo(Supermarket::class, 'supermarket_id');
     }
 
     public function packageMoves() 
@@ -23,5 +23,8 @@ class Package extends Model
         return $this->hasOne(PackageMove::class);
     }
 
+    protected $fillable = [
+        'tracking_number', 'description', 'weight', 'dimensions', 'status', 'supermarket_id'
+    ];
 
 }

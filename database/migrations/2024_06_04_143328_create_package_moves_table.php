@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('handled_by');
             $table->timestamps();
 
-            $table->foreign('package_id')->references('id')->on('packages');
-            $table->foreign('handled_by')->references('id')->on('users');
+            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
+            $table->foreign('handled_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

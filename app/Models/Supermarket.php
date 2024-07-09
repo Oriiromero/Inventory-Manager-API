@@ -8,9 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Supermarket extends Model
 {
     use HasFactory;
-
     public function packages()
     {
         return $this->hasMany(Package::class);
     }
+
+    protected $fillable = [
+        'name', 'address', 'contact_email'
+    ];
 }

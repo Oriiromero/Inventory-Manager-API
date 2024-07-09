@@ -11,7 +11,8 @@ class StorePackageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        #TODO: turn this to false when the auth by user is completed
+        return true;
     }
 
     /**
@@ -21,8 +22,31 @@ class StorePackageRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
-            //
+           'trackingNumber' => ['required', 'string', 'max:100'],
+            'description' => ['required', 'string', 'max:250'],
+            'weight' => ['required', 'numeric'],
+            'dimensions' => ['required', 'string', 'max:50'],
+            'status' => ['required', 'string'],
+            'supermarketId' => ['sometimes', 'required', 'exists:supermarkets,id'],
         ];
+    }
+
+    protected function prepareForValidation() 
+    {
+        if($this->trackingNumber)
+        {
+            $this->merge([
+                'tracking_number' => $this->trackingNumber,
+            ]);
+        }
+
+        if($this->supermarketId)
+        {
+            $this->merge([
+                'supermarket_id' => $this->supermarketId,
+            ]);
+        }
     }
 }

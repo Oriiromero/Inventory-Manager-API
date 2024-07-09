@@ -40,25 +40,40 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
 
 
-// Routes accessible to 'admin' role
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
-    Route::delete('users/{user}', [UserController::class, 'destroy']);
+// Routes accessible to both 'admin' role and 'employee' role
+Route::middleware(['auth:sanctum', 'role:employee,admin'])->group(function () {
+    //Packages
+    Route::get('packages', [PackageController::class, 'index']);
+    Route::get('packages/{package}', [PackageController::class, 'show']);
+    Route::post('packages', [PackageController::class, 'store']);
+    Route::put('packages/{package}', [PackageController::class, 'update']);
+    Route::patch('packages/{package}', [PackageController::class, 'update']);
 
-    Route::delete('packages-moves/{packageMove}', [PackageMoveController::class, 'destroy']);
-    Route::delete('packages/{packageMove}', [PackageController::class, 'destroy']);
-    Route::delete('supermarkets/{supermarket}', [SupermarketController::class, 'destroy']);
-});
+    //Supermarkets
+    Route::get('supermarkets', [SupermarketController::class, 'index']);
+    Route::get('supermarkets/{supermarket}', [SupermarketController::class, 'show']);
+    Route::post('supermarkets', [SupermarketController::class, 'store']);
+    Route::put('supermarkets/{supermarket}', [SupermarketController::class, 'put']);
+    Route::patch('supermarkets/{supermarket}', [SupermarketController::class, 'patch']);
 
-//Routes accessible to 'employee' role
-Route::middleware(['auth:sanctum', 'role:employee'])->group(function () {
-    Route::apiResource('packages', PackageController::class)->except(['destroy']);
-    Route::apiResource('supermarkets', SupermarketController::class)->except(['destroy']);
+    //Package moves
     Route::get('/packages-moves', [PackageMoveController::class, 'index']);
     Route::get('/packages-moves/{packageMove}', [PackageMoveController::class, 'show']);
     Route::post('/packages-moves', [PackageMoveController::class, 'store']);
     Route::put('/packages-moves/{packageMove}', [PackageMoveController::class, 'update']);
     Route::patch('/packages-moves/{packageMove}', [PackageMoveController::class, 'update']);
+});
+
+// Routes accessible to 'admin' role only
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register');
+    
+    Route::delete('users/{user}', [UserController::class, 'destroy']);
+    Route::delete('packages/{package}', [PackageController::class, 'destroy']);
+    Route::delete('supermarkets/{supermarket}', [SupermarketController::class, 'destroy']);
+    Route::delete('packages-moves/{packageMove}', [PackageMoveController::class, 'destroy']);
+    Route::delete('packages/{package}', [PackageController::class, 'destroy']);
+    Route::delete('supermarkets/{supermarket}', [SupermarketController::class, 'destroy']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             SupermarketSeeder::class,
             PackageSeeder::class,
             PackageMoveSeeder::class,
-            // AuditLogSeeder::class,
+            AuditLogSeeder::class,
         ]);
 
         echo "DatabaseSeeder completed\n";

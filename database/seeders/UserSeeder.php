@@ -22,9 +22,9 @@ class UserSeeder extends Seeder
             'password' => 'admin1234'
         ]);
         
-        // User::factory()
-        // ->count(25)
-        // ->create();
+        User::factory()
+        ->count(25)
+        ->create();
 
         $count = User::count();
         echo "Total Users in DB: $count\n";

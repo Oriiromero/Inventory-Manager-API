@@ -16,7 +16,7 @@ class SupermarketSeeder extends Seeder
         echo "Seeding 10 supermarkets\n";
 
         Supermarket::factory()
-        ->count(5)
+        ->count(10)
         ->create();
         $count = Supermarket::count();
 

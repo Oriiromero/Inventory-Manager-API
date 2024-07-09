@@ -21,7 +21,7 @@ class PackageResource extends JsonResource
             'weight' => $this->weight,
             'dimensions' => $this->dimensions,
             'status' => $this->status,
-            'supermarkets' => SupermarketResource::collection($this->whenLoaded('supermarket')),
+            'supermarkets' => new SupermarketResource($this->whenLoaded('supermarket')),
         ];
     }
 }

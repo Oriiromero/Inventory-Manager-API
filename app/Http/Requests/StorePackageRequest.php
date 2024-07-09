@@ -29,7 +29,7 @@ class StorePackageRequest extends FormRequest
             'weight' => ['required', 'numeric'],
             'dimensions' => ['required', 'string', 'max:50'],
             'status' => ['required', 'string'],
-            'supermarketId' => ['sometimes', 'required', 'exists:supermarkets,id'], //exists:supermarkets,id
+            'supermarketId' => ['sometimes', 'required', 'exists:supermarkets,id'],
         ];
     }
 

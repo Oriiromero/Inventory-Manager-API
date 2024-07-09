@@ -15,7 +15,7 @@ class Package extends Model
     }
     public function supermarket() 
     {
-        return $this->belongsTo(Supermarket::class);
+        return $this->belongsTo(Supermarket::class, 'supermarket_id');
     }
 
     public function packageMoves() 

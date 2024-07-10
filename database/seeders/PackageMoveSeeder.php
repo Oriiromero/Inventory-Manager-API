@@ -16,7 +16,7 @@ class PackageMoveSeeder extends Seeder
         echo "Seeding 20 package moves\n";
 
         PackageMove::factory()
-        ->count(20)
+        ->count(10)
         ->create();
 
         $count = PackageMove::count();

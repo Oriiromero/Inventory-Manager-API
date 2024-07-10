@@ -16,13 +16,15 @@ class UserSeeder extends Seeder
         echo "Seeding 25 + 1 users ";
 
         User::factory()->create([
-            'name' => 'Test User',
+            'name' => 'Admin user',
             'email' => 'test@example.com',
+            'role' => 'admin',
+            'password' => 'admin1234'
         ]);
         
-        User::factory()
-        ->count(25)
-        ->create();
+        // User::factory()
+        // ->count(25)
+        // ->create();
 
         $count = User::count();
         echo "Total Users in DB: $count\n";

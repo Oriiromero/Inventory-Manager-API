@@ -16,7 +16,7 @@ class PackageSeeder extends Seeder
         echo "Seeding 25 packages\n";
 
         Package::factory()
-        ->count(25)
+        ->count(10)
         ->create();
 
         $count = Package::count();

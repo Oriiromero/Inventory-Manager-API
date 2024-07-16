@@ -15,9 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Authentication routes
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-    ->middleware('guest')
-    ->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+Route::get('packages', [PackageController::class, 'index']);
 
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
     ->middleware('guest')
@@ -42,7 +42,7 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
 // Routes accessible to both 'admin' role and 'employee' role
 Route::middleware(['auth:sanctum', 'role:employee,admin'])->group(function () {
     //Packages
-    Route::get('packages', [PackageController::class, 'index']);
+    // Route::get('packages', [PackageController::class, 'index']);
     Route::get('packages/{package}', [PackageController::class, 'show']);
     Route::post('packages', [PackageController::class, 'store']);
     Route::put('packages/{package}', [PackageController::class, 'update']);

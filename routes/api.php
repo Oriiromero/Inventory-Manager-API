@@ -39,7 +39,6 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth:sanctum')
     ->name('logout');
 
-
 // Routes accessible to both 'admin' role and 'employee' role
 Route::middleware(['auth:sanctum', 'role:employee,admin'])->group(function () {
     //Packages

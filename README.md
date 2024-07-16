@@ -9,5 +9,7 @@ CRUD for packages, packages moves, supermarkets and users. Audit logs are regist
 
 There are two roles to assign to a user when created, 'admin' or 'employee'. Admins have access to all the actions in the database whereas employees can do everything that's not deleting data. Only admin users can create or delete other users.
 
+### Run on Google cloud run
 
+[![Run on Google Cloud](https://storage.googleapis.com/cloudrun/button.svg)](https://console.cloud.google.com/cloudshell/editor?shellonly=true&cloudshell_image=gcr.io/cloudrun/button&cloudshell_git_repo=https://github.com/Oriiromero/Inventory-Manager-API.git)
 
